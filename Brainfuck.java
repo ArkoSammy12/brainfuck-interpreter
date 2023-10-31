@@ -73,27 +73,26 @@ public class Brainfuck {
                 case ',':
                     String str = sc.nextLine();
                     if (!str.isEmpty()) {
-                        int val = (int) str.charAt(0);
+                        int val = str.charAt(0);
                         cells[cellPointer] = val;
                     }
                     programCounter++;
                     break;
                 case '[':
                     if (cells[cellPointer] == 0) {
-                        Stack<Character> nest = new Stack<>();
-                        nest.push(c);
+                        int nest = 1;
                         int i = programCounter;
                         i++;
                         x:
                         while (i < chars.length) {
                             switch (chars[i]) {
                                 case '[':
-                                    nest.push(chars[i]);
+                                    nest++;
                                     i++;
                                     break;
                                 case ']':
-                                    nest.pop();
-                                    if (nest.isEmpty()) {
+                                    nest--;
+                                    if (nest == 0) {
                                         programCounter = i;
                                         programCounter++;
                                         break x;
@@ -125,6 +124,7 @@ public class Brainfuck {
 
             }
 
+            //System.out.println(cellPointer + ", " + programCounter);
         }
 
     }
