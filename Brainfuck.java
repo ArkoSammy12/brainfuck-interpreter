@@ -1,11 +1,9 @@
-
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class Brainfuck {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
@@ -21,19 +19,19 @@ public class Brainfuck {
             sb.append(input);
         }
 
-        char[] chars = sb.toString().toCharArray();
+        char[] program = sb.toString().toCharArray();
 
         int[] cells = new int[30000];
 
-        Stack<Integer> startingLoopPc = new Stack<>();
+        Stack<Integer> startingLoopInstructionPointers = new Stack<>();
 
         int cellPointer = 0;
 
-        int programCounter = 0;
+        int instructionPointer = 0;
 
-        while (programCounter < chars.length) {
+        while (instructionPointer < program.length) {
 
-            char c = chars[programCounter];
+            char c = program[instructionPointer];
 
             switch (c) {
 
@@ -43,7 +41,7 @@ public class Brainfuck {
                     } else {
                         cells[cellPointer] = 0;
                     }
-                    programCounter++;
+                    instructionPointer++;
                     break;
 
                 case '-':
@@ -52,23 +50,23 @@ public class Brainfuck {
                     } else {
                         cells[cellPointer] = 255;
                     }
-                    programCounter++;
+                    instructionPointer++;
                     break;
                 case '>':
                     if (cellPointer != cells.length - 1) {
                         cellPointer++;
                     }
-                    programCounter++;
+                    instructionPointer++;
                     break;
                 case '<':
                     if (cellPointer != 0) {
                         cellPointer--;
                     }
-                    programCounter++;
+                    instructionPointer++;
                     break;
                 case '.':
                     System.out.print((char) cells[cellPointer]);
-                    programCounter++;
+                    instructionPointer++;
                     break;
                 case ',':
                     String str = sc.nextLine();
@@ -76,16 +74,16 @@ public class Brainfuck {
                         int val = str.charAt(0);
                         cells[cellPointer] = val;
                     }
-                    programCounter++;
+                    instructionPointer++;
                     break;
                 case '[':
                     if (cells[cellPointer] == 0) {
                         int nest = 1;
-                        int i = programCounter;
+                        int i = instructionPointer;
                         i++;
                         x:
-                        while (i < chars.length) {
-                            switch (chars[i]) {
+                        while (i < program.length) {
+                            switch (program[i]) {
                                 case '[':
                                     nest++;
                                     i++;
@@ -93,8 +91,8 @@ public class Brainfuck {
                                 case ']':
                                     nest--;
                                     if (nest == 0) {
-                                        programCounter = i;
-                                        programCounter++;
+                                        instructionPointer = i;
+                                        instructionPointer++;
                                         break x;
                                     }
                                     i++;
@@ -106,25 +104,24 @@ public class Brainfuck {
                         }
 
                     } else {
-                        startingLoopPc.push(programCounter);
-                        programCounter++;
+                        startingLoopInstructionPointers.push(instructionPointer);
+                        instructionPointer++;
                     }
                     break;
                 case ']':
                     if (cells[cellPointer] != 0) {
-                        programCounter = startingLoopPc.peek();
-                        programCounter++;
+                        instructionPointer = startingLoopInstructionPointers.peek();
                     } else {
-                        startingLoopPc.pop();
-                        programCounter++;
+                        startingLoopInstructionPointers.pop();
                     }
+                    instructionPointer++;
                     break;
                 default:
-                    programCounter++;
+                    instructionPointer++;
 
             }
 
-            //System.out.println(cellPointer + ", " + programCounter);
+            //System.out.println(cellPointer + ", " + instructionPointer);
         }
 
     }
