@@ -1,3 +1,4 @@
+
 import java.util.*;
 
 public class Brainfuck {
@@ -36,40 +37,40 @@ public class Brainfuck {
 
             switch (instruction) {
 
-                case '+':
+                case '+' -> {
                     if (cells[cellPointer] != 255) {
                         cells[cellPointer]++;
                     } else {
                         cells[cellPointer] = 0;
                     }
                     instructionPointer++;
-                    break;
+                }
 
-                case '-':
+                case '-' -> {
                     if (cells[cellPointer] != 0) {
                         cells[cellPointer]--;
                     } else {
                         cells[cellPointer] = 255;
                     }
                     instructionPointer++;
-                    break;
-                case '>':
+                }
+                case '>' -> {
                     if (cellPointer != cells.length - 1) {
                         cellPointer++;
                     }
                     instructionPointer++;
-                    break;
-                case '<':
+                }
+                case '<' -> {
                     if (cellPointer != 0) {
                         cellPointer--;
                     }
                     instructionPointer++;
-                    break;
-                case '.':
+                }
+                case '.' -> {
                     System.out.print((char) cells[cellPointer]);
                     instructionPointer++;
-                    break;
-                case ',':
+                }
+                case ',' -> {
                     int val;
                     if (inputBuffer.isEmpty()) {
                         String inputLine = sc.nextLine();
@@ -85,8 +86,8 @@ public class Brainfuck {
                         cells[cellPointer] = val;
                     }
                     instructionPointer++;
-                    break;
-                case '[':
+                }
+                case '[' -> {
                     if (cells[cellPointer] == 0) {
                         int nest = 1;
                         int i = instructionPointer;
@@ -94,11 +95,11 @@ public class Brainfuck {
                         x:
                         while (i < program.length) {
                             switch (program[i]) {
-                                case '[':
+                                case '[' -> {
                                     nest++;
                                     i++;
-                                    break;
-                                case ']':
+                                }
+                                case ']' -> {
                                     nest--;
                                     if (nest == 0) {
                                         instructionPointer = i;
@@ -106,10 +107,9 @@ public class Brainfuck {
                                         break x;
                                     }
                                     i++;
-                                    break;
-                                default:
+                                }
+                                default ->
                                     i++;
-                                    break;
                             }
                         }
 
@@ -117,16 +117,16 @@ public class Brainfuck {
                         startingLoopInstructionPointers.push(instructionPointer);
                         instructionPointer++;
                     }
-                    break;
-                case ']':
+                }
+                case ']' -> {
                     if (cells[cellPointer] != 0) {
                         instructionPointer = startingLoopInstructionPointers.peek();
                     } else {
                         startingLoopInstructionPointers.pop();
                     }
                     instructionPointer++;
-                    break;
-                default:
+                }
+                default ->
                     instructionPointer++;
 
             }
