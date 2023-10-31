@@ -25,7 +25,7 @@ public class Brainfuck {
 
         int[] cells = new int[30000];
 
-        Stack<Integer> loops = new Stack<>();
+        Stack<Integer> startingLoopPc = new Stack<>();
 
         int cellPointer = 0;
 
@@ -106,16 +106,16 @@ public class Brainfuck {
                         }
 
                     } else {
-                        loops.push(programCounter);
+                        startingLoopPc.push(programCounter);
                         programCounter++;
                     }
                     break;
                 case ']':
                     if (cells[cellPointer] != 0) {
-                        programCounter = loops.peek();
+                        programCounter = startingLoopPc.peek();
                         programCounter++;
                     } else {
-                        loops.pop();
+                        startingLoopPc.pop();
                         programCounter++;
                     }
                     break;
