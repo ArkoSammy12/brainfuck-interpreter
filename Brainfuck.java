@@ -1,5 +1,4 @@
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public class Brainfuck {
 
@@ -10,13 +9,13 @@ public class Brainfuck {
         System.out.println("Enter brainfuck program. Press Enter twice to run the program.");
 
         StringBuilder sb = new StringBuilder();
-        String input;
+        String str;
         while (sc.hasNextLine()) {
-            input = sc.nextLine();
-            if (input.isEmpty()) {
+            str = sc.nextLine();
+            if (str.isEmpty()) {
                 break;
             }
-            sb.append(input);
+            sb.append(str);
         }
 
         char[] program = sb.toString().toCharArray();
@@ -24,6 +23,8 @@ public class Brainfuck {
         int[] cells = new int[30000];
 
         Stack<Integer> startingLoopInstructionPointers = new Stack<>();
+
+        Queue<Integer> inputBuffer = new LinkedList<>();
 
         int cellPointer = 0;
 
@@ -69,9 +70,18 @@ public class Brainfuck {
                     instructionPointer++;
                     break;
                 case ',':
-                    String str = sc.nextLine();
-                    if (!str.isEmpty()) {
-                        int val = str.charAt(0);
+                    int val;
+                    if (inputBuffer.isEmpty()) {
+                        String inputLine = sc.nextLine();
+                        if (!inputLine.isEmpty()) {
+                            char[] input = inputLine.toCharArray();
+                            for (char c : input) {
+                                inputBuffer.offer((int) c);
+                            }
+                        }
+                    }
+                    if (!inputBuffer.isEmpty()) {
+                        val = inputBuffer.poll();
                         cells[cellPointer] = val;
                     }
                     instructionPointer++;
