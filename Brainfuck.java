@@ -1,4 +1,5 @@
 
+import java.io.*;
 import java.util.*;
 
 public class Brainfuck {
@@ -7,28 +8,37 @@ public class Brainfuck {
 
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Enter brainfuck program. Press Enter twice to run the program.");
-
-        StringBuilder sb = new StringBuilder();
-        String str;
-        while (sc.hasNextLine()) {
-            str = sc.nextLine();
-            if (str.isEmpty()) {
-                break;
+        char[] program;
+        if (args.length > 0) {
+            // Read program from file
+            try {
+                program = readFile(args[0]);
+            } catch (IOException e) {
+                System.err.println("Error reading file: " + e.getMessage());
+                return;
             }
-            sb.append(str);
-        }
+        } else {
+            // Read program from standard input
+            System.out.println("Enter brainfuck program. Press Enter twice to run the program.");
 
-        char[] program = sb.toString().toCharArray();
+            StringBuilder sb = new StringBuilder();
+            String str;
+            while (sc.hasNextLine()) {
+                str = sc.nextLine();
+                if (str.isEmpty()) {
+                    break;
+                }
+                sb.append(str);
+            }
+            program = sb.toString().toCharArray();
+        }
 
         int[] cells = new int[30000];
 
         Stack<Integer> startingLoopInstructionPointers = new Stack<>();
-
         Queue<Integer> inputBuffer = new LinkedList<>();
 
         int cellPointer = 0;
-
         int instructionPointer = 0;
 
         while (instructionPointer < program.length) {
@@ -134,5 +144,17 @@ public class Brainfuck {
             //System.out.println(cellPointer + ", " + instructionPointer);
         }
 
+    }
+
+    // Method to read the program from a file
+    private static char[] readFile(String filePath) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        }
+        return sb.toString().toCharArray();
     }
 }
