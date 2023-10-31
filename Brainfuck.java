@@ -31,9 +31,9 @@ public class Brainfuck {
 
         while (instructionPointer < program.length) {
 
-            char c = program[instructionPointer];
+            char instruction = program[instructionPointer];
 
-            switch (c) {
+            switch (instruction) {
 
                 case '+':
                     if (cells[cellPointer] != 255) {
